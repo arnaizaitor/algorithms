@@ -15,11 +15,13 @@ class Searcher:
     # Return:     + int: -1 if the target doesn't appear in List, the index of target if it does appear in List
     ########################################################################################################################################################
     def binarySearch(self, List, target, ascending = True):
-        if (isinstance(List,(list,)) == False):
-            return 'The first attribute should be an ordered list'
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
 
         if(len(List) <= 0):
-            return 'The list must not be empty'
+            print('The list must not be empty')
+            return -1
 
         pointerA = 0
         pointerB = len(List) - 1
@@ -33,7 +35,7 @@ class Searcher:
                 return pointerB
 
             else:
-                pointerC = floor((pointerA + pointerB)/2)
+                pointerC = int(floor((pointerA + pointerB)/2))
 
                 #Stop condition
                 if (stop == pointerC):
@@ -70,11 +72,13 @@ class Searcher:
     # Return:     + int: -1 if the target doesn't appear in List, the index of the first appearance of the target if it does appear in List
     ########################################################################################################################################################
     def linearSearch(self, List, target):
-        if (isinstance(List,(list,)) == False):
-            return 'The first attribute should be a list'
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
 
         if(len(List) <= 0):
-            return 'The list must not be empty'
+            print('The list must not be empty')
+            return -1
 
         for i in range(len(List)):
             if(List[i] == target):
@@ -93,11 +97,13 @@ class Searcher:
     # Return:     + int: -1 if the target doesn't appear in List, the index of the first appearance of the target if it does appear in List
     ########################################################################################################################################################
     def orderedLinearSearch(self, List, target, ascending = True):
-        if (isinstance(List,(list,)) == False):
-            return 'The first attribute should be an ordered list'
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
 
         if(len(List) <= 0):
-            return 'The list must not be empty'
+            print('The list must not be empty')
+            return -1
 
         for i in range(len(List)):
             #if the list is ascending sorted
@@ -128,15 +134,18 @@ class Searcher:
     # Return:     + int: -1 if the target doesn't appear in List, the index of target if it does appear in List
     ########################################################################################################################################################
     def jumpSearch(self, List, target, jumpSize = -1):
-        if (isinstance(List,(list,)) == False):
-            return 'The first attribute should be an ordered list'
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
 
         if(len(List) <= 0):
-            return 'The list must not be empty'
+            print('The list must not be empty')
+            return -1
 
         if(jumpSize == -1):
             jumpSize = int(floor(sqrt(len(List))))
 
+        #If unsert, we set jumpSize to its most optimal value
         size = len(List)
         if(jumpSize > size):
             jumpSize = size - 1
@@ -158,19 +167,87 @@ class Searcher:
                 if(ret == -1):
                     return ret
                 else:
-                    return jumpSize*count + ret
+                    return jumpSize * count + ret
             else:
                 count += 1
                 pointerA = pointerB
                 pointerB = min(pointerB + jumpSize, size-1)
 
 
+    ########################################################################################################################################################
+    # Function Name: interpolationSearch
+    # Attributes: + self: Searcher instance
+    #             + List: (ascending by default) ordered list where we want to search (can contain any type of object)
+    #             + target: object we want to see whether it is in List or not
+    #
+    # Return:     + int: -1 if the target doesn't appear in List, the index of target if it does appear in List
+    ########################################################################################################################################################
+    def interpolationSearch(self, List, target):
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
 
+        if(len(List) <= 0):
+            print('The list must not be empty')
+            return -1
 
+        pointerA = 0
+        pointerB = len(List) - 1
 
+        while(pointerA <= pointerB and target >= List[pointerA] and target <= List[pointerB]):
+            if(pointerA == pointerB):
+                if(List[pointerA] == target):
+                    if(pointerA < 0):
+                        return len(List) + pointerA
+                    return pointerA
+                else:
+                    return -1
 
+            else:
+                pos = pointerA + int((((float(pointerB - pointerA) / List[pointerB] - List[pointerA])) * (target - List[pointerA])))
 
+                if(List[pos] == target):
+                    if(pos < 0):
+                        return len(List) + pos
+                    return pos
 
+                if(List[pos] < target):
+                    pointerA = pos + 1
+
+        return -1
+
+    ########################################################################################################################################################
+    # Function Name: exponentialSearch
+    # Attributes: + self: Searcher instance
+    #             + List: (ascending by default) ordered list where we want to search (can contain any type of object)
+    #             + target: object we want to see whether it is in List or not
+    #
+    # Return:     + int: -1 if the target doesn't appear in List, the index of target if it does appear in List
+    ########################################################################################################################################################
+    def exponentialSearch(self, List, target):
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
+
+        if(len(List) <= 0):
+            print('The list must not be empty')
+            return -1
+
+        s = Searcher()
+
+        if(List[0] == target):
+            return target
+
+        #So we can duplicate it, due to that we check index 0 independently
+        pointer = 1
+
+        #if element at index pointer is greater than our target, if the target is in the list,
+        #it must be in the sublist List[0:pointer] (list considered in ascending order)
+        while(pointer < len(List) and List[pointer] <= target):
+            pointer = pointer * 2
+
+        #binary search in the found interval
+        return s.binarySearch(List[:pointer], target)
 
 
 
@@ -178,8 +255,8 @@ class Searcher:
 
 if(__name__ == '__main__'):
     s = Searcher()
-    L = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610]
+    L = (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610)
 
     T = []
 
-    print(s.jumpSearch(L, 13, jumpSize = 112))
+    print(s.exponentialSearch(T, 6100))
