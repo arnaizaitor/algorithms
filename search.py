@@ -249,6 +249,37 @@ class Searcher:
         #binary search in the found interval
         return s.binarySearch(List[:pointer], target)
 
+    ########################################################################################################################################################
+    # Function Name: recursiveSearch
+    # Attributes: + self: Searcher instance
+    #             + List: (ascending by default) ordered list where we want to search (can contain any type of object)
+    #             + target: object we want to see whether it is in List or not
+    #             + recursion: number of times recursivity has been performed
+    #
+    # Return:     + int: -1 if the target doesn't appear in List, the index of target if it does appear in List
+    ########################################################################################################################################################
+    def recursiveSearch(self, List, target, recursion = 0):
+        if (isinstance(List,(list,tuple,)) == False):
+            print('The first attribute should be an ordered list')
+            return -1
+
+        if(len(List) <= 0):
+            print('The list must not be empty')
+            return -1
+
+        s = Searcher()
+
+        if(List[0] == target):
+            return recursion
+
+        else:
+            return s.recursiveSearch(List[1:], target, recursion + 1)
+
+        return -1
+
+
+
+
 
 
 
@@ -259,4 +290,4 @@ if(__name__ == '__main__'):
 
     T = []
 
-    print(s.exponentialSearch(T, 6100))
+    print(s.recursiveSearch(L, 21))
