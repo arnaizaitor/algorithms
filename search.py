@@ -97,7 +97,7 @@ class Searcher:
     # Return:     + int: -1 if the target doesn't appear in List, the index of the first appearance of the target if it does appear in List
     ########################################################################################################################################################
     def orderedLinearSearch(self, List, target, ascending = True):
-        if (isinstance(List,(list,tuple,)) == False):
+        if (isinstance(List, (list,tuple,)) == False):
             print('The first attribute should be an ordered list')
             return -1
 
@@ -153,8 +153,6 @@ class Searcher:
         #number of intervals previously checked
         count = 0
 
-        searcher = Searcher()
-
         pointerA = 0
         pointerB = jumpSize
 
@@ -163,7 +161,7 @@ class Searcher:
 
         while(1):
             if((target >= List[pointerA]) and (target <= List[pointerB])):
-                ret = searcher.linearSearch(List[pointerA:pointerB+1], target)
+                ret = self.linearSearch(List[pointerA:pointerB+1], target)
                 if(ret == -1):
                     return ret
                 else:
@@ -267,13 +265,11 @@ class Searcher:
             print('The list must not be empty')
             return -1
 
-        s = Searcher()
-
         if(List[0] == target):
             return recursion
 
         else:
-            return s.recursiveSearch(List[1:], target, recursion + 1)
+            return self.recursiveSearch(List[1:], target, recursion + 1)
 
         return -1
 
